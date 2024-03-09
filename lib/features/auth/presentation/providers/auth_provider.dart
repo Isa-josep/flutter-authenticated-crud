@@ -18,11 +18,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }): super(AuthState());
 
   void loginUser(String email, String password)async{
-    // final user =await authRepository.login(email, password);
-    // state = state.copyWith(
-    //   authStatus: AuthStatus.authenticated,
-    //   user: user
-    // );
+    await Future.delayed(const Duration(milliseconds: 500));
+    try{
+      final User user = await authRepository.login(email, password);
+      _setLoggedUser(user);
+    }
+    on WrongCredencial{
+      logout('credenciales incorrectas');
+    }
+    catch(e){
+      logout('Error inesperado');
+    }
   }
 
   void registerUsar(String email, String password)async{
@@ -33,11 +39,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   }
 
-  Future<void> logout()async{
-    // state = state.copyWith(
-    //   authStatus: AuthStatus.notAuthenticated,
-    //   user: null
-    // );
+  void _setLoggedUser(User user){
+    //TODO: guardar el token en memoria
+    state = state.copyWith(
+      user: user,
+      //*errorMessage: '',
+      authStatus: AuthStatus.authenticated,
+
+    );
+  }
+
+  Future<void> logout([String? errorMessage])async{
+    //TODO: borrar el token de memoria
+    state = state.copyWith(
+      user: null,
+      authStatus: AuthStatus.notAuthenticated,
+      errorMessage: errorMessage,
+    );
   }
   
 }
