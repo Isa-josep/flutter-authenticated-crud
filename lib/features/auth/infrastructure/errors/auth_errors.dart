@@ -1,8 +1,16 @@
 
 class WrongCredencial implements Exception {
-  final String message = 'Wrong Credencial';
+
 } 
 
 class InvalidToken implements Exception {
-  final String message = 'Wrong Credencial';
+
 } 
+
+class ConnectionTimeOut implements Exception{}
+
+class CustomErrror implements Exception{
+  final String message;
+  // final int erroCode;
+  CustomErrror(this.message);
+}

@@ -26,6 +26,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     on WrongCredencial{
       logout('credenciales incorrectas');
     }
+    on ConnectionTimeOut{
+      logout('time out');
+    }
     catch(e){
       logout('Error inesperado');
     }
@@ -69,7 +72,7 @@ enum AuthStatus{
 class AuthState{
   final AuthStatus authStatus;
   final User? user;
-  final String? errorMessage;
+  final String errorMessage;
 
   AuthState({
     this.authStatus =AuthStatus.checking, 

@@ -27,9 +27,12 @@ class AuthDataSourceImpl implements AuthDataSource{
       });
       final user = UserMapper.userJsonToEntity(response.data);
       return user;
-    }
-    catch(e){
-      throw WrongCredencial ();
+    } on DioError catch(e){
+      if(e.response?.statusCode==401) throw WrongCredencial();
+      if(e.type==DioErrorType.connectionTimeout) throw ConnectionTimeOut();
+      throw CustomErrror('Something wrong happed');
+    }catch (e){
+      throw CustomErrror('Error inesperado' );
     }
   }
 
